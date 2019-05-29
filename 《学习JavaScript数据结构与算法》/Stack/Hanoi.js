@@ -4,27 +4,26 @@ var stack1 = new Stack(),
     stack2 = new Stack(),
     stack3 = new Stack();
 
+stack1.name = 'A';
+stack2.name = 'B';
+stack3.name = 'C';
+
 var num = 3;    // 汉诺塔的级数
 
 while(num--){
     stack1.push(num)
 }
 
-var obj = {
-    "A": stack1,
-    "B": stack2,
-    "C": stack3,
-};
-function hanoi(disc, a, b, c){
-    if(disc > 0){
-        hanoi(disc-1, a, c, b);
-        console.log(' 移动 '+ disc +  ' 号圆盘 ' + ' 从 ' + a +  ' 移动到 ' +  c);
-        obj[c].push(obj[a].pop());
-        hanoi(disc-1, b, a, c)
+function hanoi(rank, from, to, helper){
+    if(rank > 0){
+        hanoi(rank-1, from, helper, to);
+        console.log(' 移动 '+ rank +  ' 号圆盘 ' + ' 从 ' + from.name +  ' 移动到 ' +  to.name);
+        to.push(from.pop());
+        hanoi(rank-1, helper, to, from)
     }
 }
 
-hanoi(obj['A'].size(), "A", "B", "C");
+hanoi(stack1.size(), stack1, stack2, stack3);
 
 
 /**
@@ -34,7 +33,7 @@ hanoi(obj['A'].size(), "A", "B", "C");
  * 移动规律：
  *  将A柱子上的n-1个盘子暂时移到B柱子上
  *  A柱子只剩下最大的盘子，把它移到目标柱子C上
- *  最后再将A柱子上的n-1个盘子移到目标柱子C上
+ *  最后再将B柱子上的n-1个盘子移到目标柱子C上
  *
  *  总共需要 2^n - 1 次
  * **/
