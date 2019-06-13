@@ -11,7 +11,7 @@ function HashTable() {
     var table = [];
 
     function loseloseHashCode(key){
-        var hash;
+        var hash = 0;
         for(var i=0;i<key.length;i++){
             hash += key.charCodeAt(i)   //将key的每个字符传成hash值并合并
         }
@@ -31,7 +31,7 @@ function HashTable() {
     this.put = function(key, value){
         var position = loseloseHashCode(key);
 
-        if(table[position] == undefined){
+        if(table[position] === undefined){
             //分离链接法时得散列表的每一个键对应的值都是一个链表
             table[position] = new LinkedList()
         }
@@ -75,7 +75,7 @@ function HashTable() {
                 if(current.element.key === key){
                     table[position].remove(current.element);
                     if(table[position].isEmpty()){
-                        table[position] = undefined;    //清除空链表
+                        table[position] = undefined;    //清除空链表，在打印时可跳过该position
                     }
 
                     return true
@@ -95,5 +95,12 @@ function HashTable() {
         }
 
         return false
-    }
+    };
+
+    this.print = function() {
+        for (var i = 0; i < table.length; ++i) {
+            if (table[i] !== undefined) {
+                console.log(i + ": " + table[i]);
+            } }
+    };
 }

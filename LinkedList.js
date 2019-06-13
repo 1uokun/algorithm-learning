@@ -117,6 +117,12 @@ class LinkedList{
         return -1
     };
 
+    //从列表中移除一项
+    remove(element){
+        let index = this.indexOf(element);
+        return this.removeAt(index)
+    }
+
     isEmpty(){
         return this.length === 0
     };
