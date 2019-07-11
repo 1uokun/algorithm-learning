@@ -31,24 +31,80 @@ function BinarySearchTree() {
         root = removeNode(root, key)
     };
 
-    //先序遍历 - 父节点->子节点左->子节点右
+    /**
+     * 先序遍历 - 父节点->子节点左->子节点右
+     * **/
     this.preOrderTraverse = function(callback){
+        //辅助函数 - 父节点->子节点左->子节点右
+        var preOrderTraverseNode = function(node, callback){
+            if(node !== null){
+                callback(node.key);
+                preOrderTraverseNode(node.left, callback);
+                preOrderTraverseNode(node.right, callback);
+            }
+        };
         preOrderTraverseNode(root, callback)
     };
-    //中序遍历 - 子节点左->父节点->子节点右（从小到大的顺序访问所有节点）
+
+    /**
+     * 中序遍历 - 子节点左->父节点->子节点右（从小到大的顺序访问所有节点）
+     * **/
     this.inOrderTraverse = function(callback){
+        //辅助函数 - 子节点左->父节点->子节点右
+        var inOrderTraverseNode = function(node, callback, index = 0){
+            if(node !== null){
+                inOrderTraverseNode(node.left, callback, index);    //优先访问左侧子节点
+                callback(node.key,index);   //在递归函数之后执行 为倒叙执行 即从最底层开始执行
+                inOrderTraverseNode(node.right, callback, index);   //再访问右侧子节点
+            }
+        };
         inOrderTraverseNode(root, callback) //callback访问者模式
     };
-    //后序遍历 - 子节点左->子节点右->父节点
+
+    /**
+     * 后序遍历 - 子节点左->子节点右->父节点
+     * **/
     this.postOrderTraverse = function(callback){
+        //辅助函数 - 子节点左->子节点右->父节点
+        var postOrderTraverseNode = function(node, callback){
+            if(node !== null){
+                postOrderTraverseNode(node.left, callback);
+                postOrderTraverseNode(node.right, callback);
+                callback(node.key)
+            }
+        };
         postOrderTraverseNode(root, callback)
     };
 
+    /**
+     * 宽度优先遍历 - 也称从上到下遍历二叉树
+     *
+     * 先访问第一层节点
+     * 再访问第二层的左节点
+     * 再访问第二层的右节点
+     * 第二层全部访问完毕之后再优先访问第二层左节点的第三层节点
+     *
+     * 利用队列的先进先出特点来循环打印
+     * **/
+    //breath-first traversal
+    this.BFS = function(){
+        var queue = new Queue();
 
+        if(root) queue.enqueue(root);
+
+        while(!queue.isEmpty()){
+
+            var currentTree = queue.dequeue();
+            console.log('print:'+currentTree.key);
+
+            if(currentTree.left) queue.enqueue(currentTree.left);
+            if(currentTree.right) queue.enqueue(currentTree.right)
+        }
+    };
 
     //辅助函数 - 向树中插入一个键
     var insertNode = function(node, newNode){
-        if(newNode.key < node.key){ //如果新节点值大于父节点
+        if(newNode.key < node.key){ //如果新节点值小于父节点
             if(node.left === null){
                 node.left = newNode
             }else {
@@ -122,40 +178,12 @@ function BinarySearchTree() {
      * @params node 需要被替换的节点的右侧树枝
      * @return node 最小值节点
      * **/
-
     var findMinNode = function(node){
         while(node && node.left !== null){
             node = node.left;
         }
 
         return node;
-    };
-
-    //辅助函数 - 子节点左->父节点->子节点右
-    var inOrderTraverseNode = function(node, callback, index = 0){
-        if(node !== null){
-            inOrderTraverseNode(node.left, callback, index);    //优先访问左侧子节点
-            callback(node.key,index);   //在递归函数之后执行 为倒叙执行 即从最底层开始执行
-            inOrderTraverseNode(node.right, callback, index);   //再访问右侧子节点
-        }
-    };
-
-    //辅助函数 - 父节点->子节点左->子节点右
-    var preOrderTraverseNode = function(node, callback){
-        if(node !== null){
-            callback(node.key);
-            preOrderTraverseNode(node.left, callback);
-            preOrderTraverseNode(node.right, callback);
-        }
-    };
-
-    //辅助函数 - 子节点左->子节点右->父节点
-    var postOrderTraverseNode = function(node, callback){
-        if(node !== null){
-            postOrderTraverseNode(node.left, callback);
-            postOrderTraverseNode(node.right, callback);
-            callback(node.key)
-        }
     };
 
     this.print = function(){
