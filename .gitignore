@@ -9,3 +9,4 @@ out
 gen
 .gitignore
 .DS_Store
+*.html
