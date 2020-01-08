@@ -119,8 +119,34 @@ class LinkedList{
 
     //从列表中移除一项
     remove(element){
-        let index = this.indexOf(element);
-        return this.removeAt(index)
+        // let index = this.indexOf(element);
+        // return this.removeAt(index)
+
+        // 重构remove方法
+        let current = this.head;
+        let prev = null;
+        while(current){
+            if(element === current.element) {
+
+                this.length--;
+
+                // 如果所删除的项不在第一个
+                // 删除该项，只需要将该项的上一个节点和该项的下一个节点相连接
+                // 该项失去引用，垃圾回收机制将自动回收该项的内存
+                if(prev !== null){
+                    prev.next = current.next
+                }else {
+                    // 如果第一个就是，则直接修改`this.head`的值
+                    this.head = current.next;
+                }
+
+                // 如果需要删除所有相同值的项，递归
+                return this.remove(element);
+            }
+
+            prev = current; // 址传递影响`this.head`
+            current = current.next
+        }
     }
 
     isEmpty(){
