@@ -139,14 +139,19 @@ class LinkedList{
                     // 如果第一个就是，则直接修改`this.head`的值
                     this.head = current.next;
                 }
+            }else {
 
-                // 如果需要删除所有相同值的项，递归
-                return this.remove(element);
+                // 如果需要删除所有与element相同的节点
+                // 应将prev放在这里
+                prev = current;
             }
 
-            prev = current; // 址传递影响`this.head`
+            // prev = current; // 址传递影响`this.head`
             current = current.next
         }
+
+
+
     }
 
     isEmpty(){
